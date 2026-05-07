@@ -1,12 +1,13 @@
 # ✦ 紫微星系 · ZSH配置
 # 命主: 武曲(金) · 身主: 天梁(绿) · 格局: 杀破狼
 
-# ── PATH ── (S117 D1 unify · brew first · Apple Python 3.9 deprecated)
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"   # brew Python 3.13/3.14 + tools 优先
-export PATH="/Applications/Ghostty.app/Contents/MacOS:$PATH"
+# ── PATH (brew first) ──
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-# Apple system Python 3.9 (broken · /usr/bin/python3) deferred · brew 3.13 stable for backend
-export PYTHON="/opt/homebrew/bin/python3.13"               # canonical Python (backend uses this)
+export PATH="/Applications/Ghostty.app/Contents/MacOS:$PATH"
+
+# ── Python (brew 3.13 stable · Apple 3.9 deprecated) ──
+export PYTHON="/opt/homebrew/bin/python3.13"
 alias python3=/opt/homebrew/bin/python3.13
 alias python=/opt/homebrew/bin/python3.13
 
@@ -15,53 +16,110 @@ export EDITOR="nano"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
-# ── 安全加固 (S115 D2 末末末·zsh hardening) ──
+# ── 安全加固 ──
 umask 077
 export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=100000
 export SAVEHIST=100000
-setopt HIST_IGNORE_SPACE       # 命令前置空格 → 不入 history (临时 secret)
-setopt HIST_IGNORE_DUPS        # 连续重复命令只存一次
+setopt HIST_IGNORE_SPACE       # 前置空格 → 不入 history (临时 secret)
+setopt HIST_IGNORE_DUPS        # 连续重复只存一次
 setopt HIST_VERIFY             # 历史扩展先 expand 显示 (防误执)
+setopt HIST_REDUCE_BLANKS      # 去除多余空格
 setopt SHARE_HISTORY           # 多 shell 共享 history
+setopt EXTENDED_HISTORY        # 带时间戳
 
-# ── Starship Prompt (紫微星系主题 · cached for speed) ──
-# Cache starship init to avoid 1-2s startup penalty per shell spawn
-# Re-generates cache when starship.toml changes
+# ── Shell Options (Claude Code compat) ──
+setopt no_nomatch              # Don't error on unmatched globs
+setopt interactive_comments    # Allow # comments in interactive shell
+setopt auto_cd                 # type directory name to cd into it
+setopt correct                 # spelling correction for commands
+
+# ── Starship Prompt (cached · 18× faster) ──
 if [[ ! -f ~/.starship_init.zsh ]] || [[ ~/.config/starship.toml -nt ~/.starship_init.zsh ]]; then
   starship init zsh > ~/.starship_init.zsh
 fi
 source ~/.starship_init.zsh
 
-# ── 紫微星系 Aliases ──
-alias zcc='cd /Users/yc/Ziwei'
-alias lmq='cd /Users/yc/Ziwei/taiweiyuan'
-alias zdev='cd /Users/yc/Ziwei && claude'
-alias zteam='cd /Users/yc/Ziwei && claude'
-# alias zdocker REMOVED S115 D2 (Docker 已删)
-alias zstatus='cat /Users/yc/Ziwei/shared/progress.md | head -30'
+# ── Cargo/Rust ──
+[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
-# VPS快捷
+# ── PATH dedup (MUST be after all PATH/source additions) ──
+typeset -U path
+
+# ── 紫微星系 Aliases ──
+alias zcc='cd ~/Ziwei'
+alias lmq='cd ~/Ziwei/taiweiyuan'
+alias zdev='cd ~/Ziwei && claude'
+alias zteam='cd ~/Ziwei && claude --team'
+alias zstatus='head -30 ~/Ziwei/shared/progress.md'
 alias vps='ssh root@216.238.101.154'
 
-# Docker快捷 (limaqi)
-# alias dcu REMOVED S115 D2 (Docker + /Users/yc/limaqi 已删)
-# alias dcd REMOVED S115 D2
-# alias dcl REMOVED S115 D2
-# alias dcr REMOVED S115 D2 (Docker + /Users/yc/limaqi 已删)
+# ── 文件/系统 ──
+alias ls='ls -G'
+alias ll='ls -alFGh'
+alias la='ls -AG'
+alias l='ls -CFG'
+alias grep='grep --color=auto'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias df='df -h'
+alias du='du -sh'
+alias o='open .'
+alias tree='find . -print | sed -e "s;[^/]*/;│   ;g;s;│   \([^│]\);├── \1;g"'
+
+# ── Git ──
+alias g='git'
+alias ga='git add'
+alias gc='git commit -m'
+alias gp='git push'
+alias gpl='git pull'
+alias gst='git status -sb'
+alias glog='git --no-pager log --oneline --graph --all --decorate -20'
+alias gco='git checkout'
+alias gb='git branch'
+alias gd='git --no-pager diff'
+alias gds='git --no-pager diff --staged'
+
+# ── macOS ──
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+alias lock='pmset displaysleepnow'
+alias battery='pmset -g batt'
+
+# ── Functions ──
+mkcd() { mkdir -p "$1" && cd "$1" }
+
+portfind() {
+  [[ -z "$1" ]] && { echo "用法: portfind <端口号>"; return 1; }
+  lsof -i ":$1"
+}
+
+portkill() {
+  [[ -z "$1" ]] && { echo "用法: portkill <端口号>"; return 1; }
+  lsof -ti ":$1" | xargs kill -9 2>/dev/null
+  echo "端口 $1 已释放"
+}
+
+ffcp() {
+  local f=$(find . -name "$1" | head -1)
+  [[ -z "$f" ]] && { echo "未找到: $1"; return 1; }
+  echo "$f" | pbcopy
+  echo "已复制: $f"
+}
 
 # ── Autojump ──
 [ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
 
-# ── Shell Optimizations for Claude Code (S117 D2) ──
-setopt no_nomatch              # Don't error on unmatched globs (Claude uses * often)
-setopt interactive_comments    # Allow # comments in interactive shell
-setopt extended_history        # Add timestamps to history entries
+# ── fzf (fuzzy search · Ctrl+R history · Ctrl+T files) ──
+if command -v fzf &>/dev/null; then
+  source <(fzf --zsh 2>/dev/null) || true
+  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+fi
 
-# ── iTerm2 Shell Integration (command markers · output capture · badges) ──
+# ── iTerm2 Shell Integration ──
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-# ── iTerm2 Badge: show 🤖 when Claude Code is active ──
+# ── iTerm2 Badge + Tab Title ──
 if [ "$ITERM_SESSION_ID" ]; then
   function iterm2_print_user_vars() {
     if [[ -n "$CLAUDE_SESSION_ID" ]]; then
@@ -70,8 +128,5 @@ if [ "$ITERM_SESSION_ID" ]; then
       iterm2_set_user_var claude_active ""
     fi
   }
-  # Tab title shows current directory name
-  precmd() {
-    echo -ne "\033]0;${PWD##*/}\007"
-  }
+  precmd() { echo -ne "\033]0;${PWD##*/}\007" }
 fi

@@ -1,0 +1,9 @@
+# ✦ 紫微星系 · Bashrc (non-login shell)
+# Sourced by .bash_profile and by non-login bash shells.
+# Keep this minimal — bulk config lives in .bash_profile.
+
+# ── Cargo (needed for non-login shells like Claude Code subshells) ──
+[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+# ── Local overrides (machine-specific, not committed) ──
+[[ -f "$HOME/.bashrc.local" ]] && source "$HOME/.bashrc.local"

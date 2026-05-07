@@ -1,0 +1,131 @@
+# ✦ 紫微星系 · Bash Profile
+# 命主: 武曲(金) · 身主: 天梁(绿) · 格局: 杀破狼
+
+# ── PATH (brew first) ──
+if [[ "$(uname -m)" == "arm64" ]]; then
+  export HOMEBREW_PREFIX="/opt/homebrew"
+else
+  export HOMEBREW_PREFIX="/usr/local"
+fi
+export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/Applications/Ghostty.app/Contents/MacOS:$PATH"
+
+# ── Python (brew 3.13 stable) ──
+export PYTHON="$HOMEBREW_PREFIX/bin/python3.13"
+alias python3="$HOMEBREW_PREFIX/bin/python3.13"
+alias python="$HOMEBREW_PREFIX/bin/python3.13"
+
+# ── 环境 ──
+export EDITOR="nano"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+# ── 安全加固 ──
+umask 077
+export HISTFILE="$HOME/.bash_history"
+export HISTSIZE=100000
+export HISTFILESIZE=100000
+export HISTCONTROL=ignoredups:ignorespace
+shopt -s histappend
+
+# ── Bash Completion ──
+if [[ -f "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ]]; then
+  source "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
+fi
+
+# ── Starship Prompt (cached · same strategy as zsh) ──
+if command -v starship &>/dev/null; then
+  if [[ ! -f ~/.starship_init.bash ]] || [[ ~/.config/starship.toml -nt ~/.starship_init.bash ]]; then
+    starship init bash > ~/.starship_init.bash
+  fi
+  source ~/.starship_init.bash
+fi
+
+# ── Cargo/Rust ──
+[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+# ── 紫微星系 Aliases ──
+alias zcc='cd ~/Ziwei'
+alias lmq='cd ~/Ziwei/taiweiyuan'
+alias zdev='cd ~/Ziwei && claude'
+alias zteam='cd ~/Ziwei && claude --team'
+alias zstatus='head -30 ~/Ziwei/shared/progress.md'
+alias vps='ssh root@216.238.101.154'
+
+# ── 文件/系统 ──
+alias ls='ls -G'
+alias ll='ls -alFGh'
+alias la='ls -AG'
+alias l='ls -CFG'
+alias grep='grep --color=auto'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias df='df -h'
+alias du='du -sh'
+alias o='open .'
+
+# ── Git ──
+alias g='git'
+alias ga='git add'
+alias gc='git commit -m'
+alias gp='git push'
+alias gpl='git pull'
+alias gst='git status -sb'
+alias glog='git --no-pager log --oneline --graph --all --decorate -20'
+alias gco='git checkout'
+alias gb='git branch'
+alias gd='git --no-pager diff'
+alias gds='git --no-pager diff --staged'
+
+# ── macOS ──
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+alias lock='pmset displaysleepnow'
+alias battery='pmset -g batt'
+
+# ── Functions ──
+mkcd() { mkdir -p "$1" && cd "$1" || return 1; }
+
+portfind() {
+  [[ -z "$1" ]] && { echo "用法: portfind <端口号>"; return 1; }
+  lsof -i ":$1"
+}
+
+portkill() {
+  [[ -z "$1" ]] && { echo "用法: portkill <端口号>"; return 1; }
+  lsof -ti ":$1" | xargs kill -9 2>/dev/null
+  echo "端口 $1 已释放"
+}
+
+ffcp() {
+  local f
+  f=$(find . -name "$1" | head -1)
+  [[ -z "$f" ]] && { echo "未找到: $1"; return 1; }
+  echo "$f" | pbcopy
+  echo "已复制: $f"
+}
+
+# ── Python venv helpers ──
+export VENV_DIR="$HOME/venvs"
+alias venv-create='_venv_create'
+alias venv-activate='_venv_activate'
+alias venv-list='ls -la "$VENV_DIR"'
+_venv_create() { python3 -m venv "$VENV_DIR/$1" && echo "✓ $VENV_DIR/$1"; }
+_venv_activate() { source "$VENV_DIR/$1/bin/activate"; }
+
+# ── Autojump ──
+[[ -s "$HOMEBREW_PREFIX/etc/profile.d/autojump.sh" ]] && source "$HOMEBREW_PREFIX/etc/profile.d/autojump.sh"
+
+# ── fzf (fuzzy search · Ctrl+R history) ──
+if command -v fzf &>/dev/null; then
+  eval "$(fzf --bash 2>/dev/null)" || true
+  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+fi
+
+# ── iTerm2 Shell Integration ──
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
+# ── Source .bashrc (non-login shell compat) ──
+[[ -f "$HOME/.bashrc" ]] && source "$HOME/.bashrc"
