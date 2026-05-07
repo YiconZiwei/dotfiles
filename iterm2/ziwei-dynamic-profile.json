@@ -1,0 +1,69 @@
+{
+  "Profiles": [
+    {
+      "Name": "紫微星系",
+      "Guid": "ziwei-galaxy-cc-profile",
+      "Dynamic Profile Parent Name": "Default",
+
+      "Normal Font": "JetBrainsMonoNFM-Regular 14",
+      "ASCII Anti Aliased": true,
+      "Non-ASCII Anti Aliased": true,
+      "Use Ligatures": true,
+
+      "Columns": 140,
+      "Rows": 42,
+
+      "Option Key Sends": 2,
+      "Right Option Key Sends": 2,
+      "Allow Clipboard Access": true,
+
+      "Use Cursor Guide": true,
+      "Smart Cursor Color": false,
+      "Minimum Contrast": 0.03,
+
+      "Scrollback Lines": 10000,
+      "Unlimited Scrollback": false,
+      "Show Mark Indicators": true,
+
+      "Terminal Type": "xterm-256color",
+      "Copy Selection": true,
+      "Triple Click Selects Full Lines": true,
+
+      "Use Tab Color": true,
+      "Badge Text": "✦ \\(session.name)",
+      "Show Status Bar": true,
+      "Transparency": 0.03,
+      "Blur": true,
+      "Blur Radius": 8.0,
+
+      "Background Color": { "Red Component": 0.059, "Green Component": 0.055, "Blue Component": 0.086, "Color Space": "sRGB" },
+      "Foreground Color": { "Red Component": 0.875, "Green Component": 0.871, "Blue Component": 0.957, "Color Space": "sRGB" },
+      "Bold Color": { "Red Component": 1.0, "Green Component": 1.0, "Blue Component": 1.0, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 0.576, "Green Component": 0.200, "Blue Component": 0.918, "Color Space": "sRGB" },
+      "Cursor Text Color": { "Red Component": 0.059, "Green Component": 0.055, "Blue Component": 0.086, "Color Space": "sRGB" },
+      "Selection Color": { "Red Component": 0.157, "Green Component": 0.149, "Blue Component": 0.302, "Color Space": "sRGB" },
+      "Selected Text Color": { "Red Component": 0.875, "Green Component": 0.871, "Blue Component": 0.957, "Color Space": "sRGB" },
+      "Link Color": { "Red Component": 0.231, "Green Component": 0.510, "Blue Component": 0.965, "Color Space": "sRGB" },
+      "Badge Color": { "Red Component": 0.576, "Green Component": 0.200, "Blue Component": 0.918, "Alpha Component": 0.3, "Color Space": "sRGB" },
+      "Tab Color": { "Red Component": 0.576, "Green Component": 0.200, "Blue Component": 0.918, "Color Space": "sRGB" },
+      "Cursor Guide Color": { "Red Component": 0.576, "Green Component": 0.200, "Blue Component": 0.918, "Alpha Component": 0.08, "Color Space": "sRGB" },
+
+      "Ansi 0 Color":  { "Red Component": 0.102, "Green Component": 0.106, "Blue Component": 0.149, "Color Space": "sRGB" },
+      "Ansi 1 Color":  { "Red Component": 0.937, "Green Component": 0.267, "Blue Component": 0.267, "Color Space": "sRGB" },
+      "Ansi 2 Color":  { "Red Component": 0.063, "Green Component": 0.725, "Blue Component": 0.506, "Color Space": "sRGB" },
+      "Ansi 3 Color":  { "Red Component": 0.961, "Green Component": 0.620, "Blue Component": 0.043, "Color Space": "sRGB" },
+      "Ansi 4 Color":  { "Red Component": 0.231, "Green Component": 0.510, "Blue Component": 0.965, "Color Space": "sRGB" },
+      "Ansi 5 Color":  { "Red Component": 0.576, "Green Component": 0.200, "Blue Component": 0.918, "Color Space": "sRGB" },
+      "Ansi 6 Color":  { "Red Component": 0.024, "Green Component": 0.714, "Blue Component": 0.831, "Color Space": "sRGB" },
+      "Ansi 7 Color":  { "Red Component": 0.663, "Green Component": 0.694, "Blue Component": 0.839, "Color Space": "sRGB" },
+      "Ansi 8 Color":  { "Red Component": 0.337, "Green Component": 0.373, "Blue Component": 0.537, "Color Space": "sRGB" },
+      "Ansi 9 Color":  { "Red Component": 0.863, "Green Component": 0.149, "Blue Component": 0.149, "Color Space": "sRGB" },
+      "Ansi 10 Color": { "Red Component": 0.204, "Green Component": 0.827, "Blue Component": 0.600, "Color Space": "sRGB" },
+      "Ansi 11 Color": { "Red Component": 0.984, "Green Component": 0.749, "Blue Component": 0.141, "Color Space": "sRGB" },
+      "Ansi 12 Color": { "Red Component": 0.506, "Green Component": 0.549, "Blue Component": 0.973, "Color Space": "sRGB" },
+      "Ansi 13 Color": { "Red Component": 0.957, "Green Component": 0.447, "Blue Component": 0.714, "Color Space": "sRGB" },
+      "Ansi 14 Color": { "Red Component": 0.133, "Green Component": 0.827, "Blue Component": 0.933, "Color Space": "sRGB" },
+      "Ansi 15 Color": { "Red Component": 0.875, "Green Component": 0.871, "Blue Component": 0.957, "Color Space": "sRGB" }
+    }
+  ]
+}
