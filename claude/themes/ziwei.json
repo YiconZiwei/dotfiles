@@ -1,0 +1,18 @@
+{
+  "name": "紫微星系",
+  "base": "dark",
+  "overrides": {
+    "claude":          "#9333EA",
+    "text":            "#dfdef4",
+    "inverseText":     "#0f0e16",
+    "inactive":        "#565f89",
+    "subtle":          "#28264d",
+    "error":           "#EF4444",
+    "success":         "#10B981",
+    "warning":         "#F59E0B",
+    "planMode":        "#3B82F6",
+    "diffAdded":       "#10B98120",
+    "diffRemoved":     "#EF444420",
+    "userMessageBackground": "#1a1b26"
+  }
+}

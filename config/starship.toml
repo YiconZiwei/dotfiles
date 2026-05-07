@@ -1,0 +1,139 @@
+# ✦ 紫微星系 · Starship Prompt
+# 命盘推算配色: 紫微(紫)·武曲(金)·天梁(绿)·破军(橙)·七杀(红)·天机(蓝)·太阳(黄)
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """$directory$git_branch$git_status$python$nodejs$docker_context$cmd_duration$line_break$character"""
+right_format = """$time"""
+
+# ── 紫微帝星 ✦ (命宫·庙·紫破同宫) ──
+[character]
+success_symbol = "[✦](bold #9333EA)"    # 紫微·紫
+error_symbol = "[✦](bold #EF4444)"      # 七杀·红(阻断)
+vimcmd_symbol = "[✦](bold #F59E0B)"    # 武曲·金(命主星)
+
+# ── 紫微·目录路径 ──
+[directory]
+style = "bold #9333EA"
+truncation_length = 3
+truncate_to_repo = true
+read_only = " 󰌾"
+
+# ── 天机·Git分支(蓝·兄弟宫·庙) ──
+[git_branch]
+symbol = " "
+style = "bold #3B82F6"
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[git_commit]
+tag_symbol = '  '
+
+# ── 天梁·Git状态(VERDICT配色) ──
+# 绿=PASS(天梁) / 橙=CONDITIONAL(破军) / 红=REJECT(七杀)
+[git_status]
+style = "#10B981"
+conflicted = "[⚔](bold #EF4444)"
+ahead = "[⇡${count}](#10B981)"
+behind = "[⇣${count}](#F97316)"
+diverged = "[⇕](bold #EF4444)"
+untracked = "[?](#FBBF24)"
+stashed = "[≡](#3B82F6)"
+modified = "[!](#F97316)"
+staged = "[+](#10B981)"
+deleted = "[✘](#EF4444)"
+format = "([$all_status$ahead_behind]($style)) "
+
+# ── 天机·Python(蓝·架构师) ──
+[python]
+symbol = " "
+style = "#3B82F6"
+format = "[$symbol$version]($style) "
+detect_files = ["requirements.txt", "pyproject.toml", "Pipfile"]
+
+# ── 天梁·Node(绿·验证通过) ──
+[nodejs]
+symbol = " "
+style = "#10B981"
+format = "[$symbol$version]($style) "
+detect_files = ["package.json", "tsconfig.json"]
+
+# ── 破军·Docker(橙·锻造/部署) ──
+[docker_context]
+symbol = " "
+style = "#F97316"
+format = "[$symbol$context]($style) "
+
+# ── 武曲·执行时间(金·命主星·效率=财务) ──
+[cmd_duration]
+min_time = 2000
+style = "#F59E0B"
+format = "[⏱ $duration]($style) "
+
+# ── 太阳·时间(淡色·广播) ──
+[time]
+disabled = false
+style = "#565f89"
+format = "[$time]($style)"
+time_format = "%H:%M"
+
+[line_break]
+disabled = false
+
+# ── Nerd Font Symbols (保留preset) ──
+[aws]
+symbol = " "
+[buf]
+symbol = " "
+[bun]
+symbol = " "
+[c]
+symbol = " "
+[cpp]
+symbol = " "
+[conda]
+symbol = " "
+[dart]
+symbol = " "
+[elixir]
+symbol = " "
+[elm]
+symbol = " "
+[golang]
+symbol = " "
+[gradle]
+symbol = " "
+[haskell]
+symbol = " "
+[java]
+symbol = " "
+[julia]
+symbol = " "
+[kotlin]
+symbol = " "
+[lua]
+symbol = " "
+[memory_usage]
+symbol = "󰍛 "
+[package]
+symbol = "󰏗 "
+[perl]
+symbol = " "
+[php]
+symbol = " "
+[ruby]
+symbol = " "
+[rust]
+symbol = "󱘗 "
+[scala]
+symbol = " "
+[swift]
+symbol = " "
+[zig]
+symbol = " "
+[hostname]
+ssh_symbol = " "
+
+[os.symbols]
+Macos = " "
+Ubuntu = " "
+Linux = " "
+Windows = "󰍲 "

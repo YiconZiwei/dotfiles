@@ -1,0 +1,77 @@
+# ✦ 紫微星系 · ZSH配置
+# 命主: 武曲(金) · 身主: 天梁(绿) · 格局: 杀破狼
+
+# ── PATH ── (S117 D1 unify · brew first · Apple Python 3.9 deprecated)
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"   # brew Python 3.13/3.14 + tools 优先
+export PATH="/Applications/Ghostty.app/Contents/MacOS:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+# Apple system Python 3.9 (broken · /usr/bin/python3) deferred · brew 3.13 stable for backend
+export PYTHON="/opt/homebrew/bin/python3.13"               # canonical Python (backend uses this)
+alias python3=/opt/homebrew/bin/python3.13
+alias python=/opt/homebrew/bin/python3.13
+
+# ── 环境 ──
+export EDITOR="nano"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+# ── 安全加固 (S115 D2 末末末·zsh hardening) ──
+umask 077
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=100000
+export SAVEHIST=100000
+setopt HIST_IGNORE_SPACE       # 命令前置空格 → 不入 history (临时 secret)
+setopt HIST_IGNORE_DUPS        # 连续重复命令只存一次
+setopt HIST_VERIFY             # 历史扩展先 expand 显示 (防误执)
+setopt SHARE_HISTORY           # 多 shell 共享 history
+
+# ── Starship Prompt (紫微星系主题 · cached for speed) ──
+# Cache starship init to avoid 1-2s startup penalty per shell spawn
+# Re-generates cache when starship.toml changes
+if [[ ! -f ~/.starship_init.zsh ]] || [[ ~/.config/starship.toml -nt ~/.starship_init.zsh ]]; then
+  starship init zsh > ~/.starship_init.zsh
+fi
+source ~/.starship_init.zsh
+
+# ── 紫微星系 Aliases ──
+alias zcc='cd /Users/yc/Ziwei'
+alias lmq='cd /Users/yc/Ziwei/taiweiyuan'
+alias zdev='cd /Users/yc/Ziwei && claude'
+alias zteam='cd /Users/yc/Ziwei && claude'
+# alias zdocker REMOVED S115 D2 (Docker 已删)
+alias zstatus='cat /Users/yc/Ziwei/shared/progress.md | head -30'
+
+# VPS快捷
+alias vps='ssh root@216.238.101.154'
+
+# Docker快捷 (limaqi)
+# alias dcu REMOVED S115 D2 (Docker + /Users/yc/limaqi 已删)
+# alias dcd REMOVED S115 D2
+# alias dcl REMOVED S115 D2
+# alias dcr REMOVED S115 D2 (Docker + /Users/yc/limaqi 已删)
+
+# ── Autojump ──
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+
+# ── Shell Optimizations for Claude Code (S117 D2) ──
+setopt no_nomatch              # Don't error on unmatched globs (Claude uses * often)
+setopt interactive_comments    # Allow # comments in interactive shell
+setopt extended_history        # Add timestamps to history entries
+
+# ── iTerm2 Shell Integration (command markers · output capture · badges) ──
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# ── iTerm2 Badge: show 🤖 when Claude Code is active ──
+if [ "$ITERM_SESSION_ID" ]; then
+  function iterm2_print_user_vars() {
+    if [[ -n "$CLAUDE_SESSION_ID" ]]; then
+      iterm2_set_user_var claude_active "🤖"
+    else
+      iterm2_set_user_var claude_active ""
+    fi
+  }
+  # Tab title shows current directory name
+  precmd() {
+    echo -ne "\033]0;${PWD##*/}\007"
+  }
+fi
